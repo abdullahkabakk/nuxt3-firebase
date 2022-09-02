@@ -1,5 +1,6 @@
 import { initializeApp } from "@firebase/app";
 import {defineNuxtPlugin, useRuntimeConfig} from "#app";
+import {initUser} from "~/composables/useFirebase";
 
 export default defineNuxtPlugin(nuxtApp => {
 
@@ -10,5 +11,6 @@ export default defineNuxtPlugin(nuxtApp => {
     };
 
     const app = initializeApp(firebaseConfig);
-    console.log(app)
+
+    initUser();
 })

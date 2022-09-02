@@ -1,4 +1,5 @@
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+import {useFirebaseUser} from "~/composables/useStates";
 
 export const createUser = async (email, password) => {
     const auth = getAuth();
@@ -24,6 +25,9 @@ export const signInUser = async (email, password) => {
 
 export const initUser = async () => {
     const auth = getAuth();
+    const firebaseUser = useFirebaseUser();
+    firebaseUser.value = auth.currentUser;
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
             // User is signed in, see docs for a list of available properties
@@ -34,6 +38,7 @@ export const initUser = async () => {
             // User is signed out
             // ...
         }
+        firebaseUser.value = user;
     });
 
 }

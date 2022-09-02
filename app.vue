@@ -1,23 +1,30 @@
 <template>
   <div>
-    <button class="button" @click="signIn">Sign In</button>
-    <button class="button" @click="signOut">Sign Out</button>
+    <button class="button" @click="signIn" v-if="!firebaseUser">Sign In</button>
+    <button class="button" @click="signOut" v-if="firebaseUser">Sign Out</button>
+    <div v-if="firebaseUser">
+    <pre>
+      {{firebaseUser}}
+    </pre>
+    </div>
+    <div v-else>User is signed out</div>
   </div>
 </template>
 
 <script setup>
 import {createUser, signInUser, signOutUser} from "./composables/useFirebase";
+import {useFirebaseUser} from "./composables/useStates";
+const credentials = ref();
+const firebaseUser = useFirebaseUser()
 
 const signIn = async () => {
   const email = "abdulla@email.com"
   const password = "12345678"
-  const credentials = await signInUser(email, password)
-  console.log(credentials)
+  credentials.value = await signInUser(email, password)
 }
 
 const signOut =  async () => {
-  const result = await signOutUser();
-  console.log("result:", result)
+  credentials.value = await signOutUser();
 }
 
 onMounted(async () => {
